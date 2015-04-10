@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>googlemap api test</title>
+    <style>
+    html,body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+    }
+    #map-canvas {
+        height: 100%;
+        width: 100%;
+    }
+    header {
+        position: absolute;
+        z-index: 99;
+        top: 0;
+        height: 100px;
+        width: 100%;
+        background: #fff;
+    }
+    section {height: 100%;margin-left: 231px; background: #FEF9CD;border: solid 1px #ccc;}
+    aside {float: left;width: 190px; height: 100%;background: #eee; border: solid 1px #ccc;margin-left: 15px;}
+    nav {margin-top: 100px; }
+    nav ol { list-style: none; padding-left: 0px; margin: 0;}
+    nav ul {padding-left: 25px;}
+    nav ol>li { padding: 10px;border-top: solid 1px #ccc;}
+    nav ol>li:last-child {border-bottom: solid 1px #ccc;}
+    nav ol>li li { padding:6px;}
+    nav li.active{
+      margin-top: 10px;
+      background: #aaa;
+      color: white;
+      margin-left: -18px;
+    }
+    </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script type="text/javascript" src="label.js"></script>
+    <script>
+
+//data
+    var data = [
+        ['device01', 25.02028424, 121.46201133, 1, 400],
+        ['device02', 25.11268345, 121.43707534, 2, 600],
+        ['device03', 25.13685911, 121.50677564, 3, 800],
+        ['device04', 25.02028424, 121.42201133, 4, 400],
+        ['device05', 25.12268345, 121.41707534, 5, 700],
+        ['device06', 25.15685911, 121.50677564, 6, 900],
+        ['device07', 25.04028424, 121.47201133, 7, 200],
+        ['device08', 25.15268345, 121.48707534, 8, 600],
+        ['device09', 25.10685911, 121.33677564, 9, 1000],
+        ['device10', 25.12683451, 121.46707534, 10, 700],
+        ['device11', 25.07685911, 121.55677564, 11, 900],
+        ['device12', 25.24028424, 121.46201133, 12, 200],
+        ['device13', 25.10268345, 121.55707534, 13, 600],
+        ['device14', 25.19485911, 121.54677564, 14, 1000]
+    ];
+
+
+    function initialize() {
+        var mapOptions = {
+            zoom: 12,
+            center: new google.maps.LatLng(data[7][1], data[7][2])
+        }
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+         setMarkers(map, data);
+         
+//circle
+        for (var i = 0; i < data.length; i++) {
+            var populationOptions = {
+                strokeColor: '#6628C4',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#6628C4',
+                fillOpacity: 0.25,
+                map: map,
+                center: new google.maps.LatLng(data[i][1], data[i][2]),
+                radius: Math.sqrt(data[i][4]) * 100
+            };
+            // Add the circle for this city to the map.
+            var cityCircle = new google.maps.Circle(populationOptions);
+        }
+
+
+//map styles
+        var styles = [{
+            stylers: [{
+                hue: "#E4B31B"
+            }, {
+                saturation: -20
+            }]
+        }, {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{
+                lightness: 80
+            }, {
+                visibility: "simplified"
+            }]
+        }, {
+            featureType: "road",
+            elementType: "labels",
+            stylers: [{
+                visibility: "off"
+            }]
+        }];
+
+        map.setOptions({styles: styles});
+    }
+
+
+    function createMarker(width, height, radius) {
+        var canvas, context;
+        canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        context = canvas.getContext("2d");
+        context.clearRect(0, 0, width, height);
+        context.fillStyle = "rgba(160,160,160,1)";
+        context.strokeStyle = "rgba(0,0,0,1)";
+
+        context.beginPath();
+        context.moveTo(radius, 0);
+        context.lineTo(width - radius, 0);
+        context.quadraticCurveTo(width, 0, width, radius);
+        context.lineTo(width, height - radius);
+        context.quadraticCurveTo(width, height, width - radius, height);
+        context.lineTo(radius, height);
+        context.quadraticCurveTo(0, height, 0, height - radius);
+        context.lineTo(0, radius);
+        context.quadraticCurveTo(0, 0, radius, 0);
+        context.closePath();
+        context.fill();
+        context.stroke();
+
+        return canvas.toDataURL();
+    }
+
+
+    function setMarkers(map, locations) {
+        for (var i = 0; i < locations.length; i++) {
+            var beach = locations[i];
+            var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                icon: createMarker(25, 25, 4),
+                title: beach[0],
+                zIndex: beach[3]
+            });
+            var label = new Label({
+                map: map
+            });
+            label.bindTo('position', marker);
+            label.bindTo('text', marker, 'zIndex');
+            label.bindTo('visible', marker);
+            label.bindTo('zIndex', marker);
+        }
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    
+    </script>
+</head>
+
+<body>
+    <header></header>
+    <aside>
+        <nav>
+            <ol>
+                <li>Mointor
+                    <ul>
+                        <li class="active">Map & floor coverage</li>
+                        <li>Topology</li>
+                        <li>Clients</li>
+                    </ul>
+                </li>
+                <li>configure</li>
+                <li>organztion</li>
+                <li>help</li>
+            </ol>
+        </nav>
+    </aside>
+    <section><div id="map-canvas"></div></section>
+</body>
+
+</html>
