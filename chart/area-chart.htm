@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: 'Power Consumption'
+        },
+        // subtitle: {
+        //     text: 'Source: <a href="http://thebulletin.metapress.com/content/c4120650912x74k7/fulltext.pdf">' +
+        //         'thebulletin.metapress.com</a>'
+        // },
+        // xAxis: {
+        //      type: 'datetime',
+        //      tickInterval: 3600 * 1000,
+        //     allowDecimals: false,
+        //     labels: {
+        //         formatter: function () {
+        //             return this.value; // clean, unformatted number for year
+        //         }
+        //     }
+        // },
+         xAxis: {
+                 type: 'datetime',
+    //Sets tickInterval to 24 * 3600 * 1000 if display is by day
+    tickInterval: 1.5 * 3600 * 1000,
+    dateTimeLabelFormats : {
+        day: '%H:%M'
+    }
+            },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function () {
+                    return this.value + 'w';
+                }
+            }
+        },
+        exporting: {
+         enabled: false
+     },
+        tooltip: {
+            // pointFormat: '{series.name} consumption: <b>{point.y:,.0f}</b><br/>Time:{point.x:,.0f}'
+        },
+
+        plotOptions: {
+            area: {
+                pointInterval:  3600 * 100,
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Power',
+            data: [ 250, 150, 250, 400, 500, 750, 600,
+            1000, 750, 800, 600, 400,650,400,500,550,600,650,400,550,750,900,500,
+            650, 550, 400, 500, 750, 600,500,550,600, 600, 400,450,400, 750, 800, 
+            600, 400,350,400,500,550,600,650,400,250,750,900,550,600, 600, 400,350,
+             ]
+        }, {
+            name: 'Stream',
+            // data: [1000, 750, 800, 600, 400,650,400,500,550,600,650,400,550,750,900,500,
+            //     650, 550, 400, 500, 750, 600,500,550,600, 600, 400,450,400, 750, 800, 
+            //     1000, 750, 800, 600, 400,650,400,500,550,600,650,400,550,750,900,500,]
+        }]
+    });
+});
+		</script>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+<script src="js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
