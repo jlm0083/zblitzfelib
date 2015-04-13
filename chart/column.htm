@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Bar chart</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Clients per day'
+        },
+         credits: {
+          enabled: false
+        },
+        subtitle: {
+            // text: 'Source: WorldClimate.com'
+        },
+        xAxis: {
+            categories: [
+                'Mar 19' + '<br/>'+'from 8:00',
+                'Mar 20',
+                'Mar 21',
+                'Mar 22',
+                'Mar 23',
+                'Mar 24',
+                'Mar 25',
+                'Mar 19' + '<br/>'+'to 8:00',
+            ],
+            crosshair: false
+        },
+        yAxis: {
+            title: {
+                text: 'Clients'
+            },
+             labels: {
+                formatter: function () {
+                    return this.value;
+                }
+            }
+
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+            }
+        },
+        series: [{
+            name: 'Clients',
+            data: [3000, 1500, 500, 700, 970, 1300, 1000, 800]
+
+        }]
+    });
+});
+		</script>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+<script src="js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
